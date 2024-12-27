@@ -2,8 +2,8 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/miniconda
 {
 	// "image": "cuas:1.0",
-	"name": "cuas:1.0",
-	"build": { 
+	"name": "vs-code-docker-gui:1.0",
+	"build": {
 		"context": "..",
 		"dockerfile": "../docker/Dockerfile"
 	},
@@ -14,40 +14,10 @@
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 	// Set *default* container specific settings.json values on container create.
-	"settings": {
-		    "vim.insertModeKeyBindings": [
-        {
-            "before": [
-                "j",
-                "k"
-            ],
-            "after": [
-                "<Esc>"
-            ]
-        }
-    ],
-    "terminal.integrated.scrollback": 1000000,
-
-		"editor.formatOnPaste": true,
-		"editor.formatOnSave": true,
-		"editor.tabSize": 4,
-		"editor.defaultFormatter": null,
-		"python.formatting.blackPath": "/usr/local/bin/black",
-		"python.formatting.provider": "black",
-		"python.linting.enabled": true,
-		"python.linting.pylintEnabled": true,
-		"python.linting.pylintPath": "/usr/local/bin/pylint",
-		"terminal.integrated.defaultProfile.linux": "bash",
-		"vim.vimrc.enable": true, 
-		"files.autoSave": "afterDelay",
-		    "vim.handleKeys": {
-        "<C-x>": false,
-        "<C-c>": false,
-        "<C-e>": false,
-        "<C-a>": false
-    }
+	// "settings": {},
+	"containerEnv": {
+		"DISPLAY": "host.docker.internal:0.0"
 	},
-	"containerEnv": {"DISPLAY": "host.docker.internal:0.0"},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [
 		// 5900
@@ -75,8 +45,41 @@
 				"ms-python.python",
 				"timonwong.shellcheck",
 				"vscodevim.vim",
-				"njpwerner.autodocstring"
+				"njpwerner.autodocstring",
+				"ms-azuretools.vscode-docker"
 			]
+		},
+		"settings": {
+			"vim.insertModeKeyBindings": [
+				{
+					"before": [
+						"j",
+						"k"
+					],
+					"after": [
+						"<Esc>"
+					]
+				}
+			],
+			"terminal.integrated.scrollback": 1000000,
+			"editor.formatOnPaste": true,
+			"editor.formatOnSave": true,
+			"editor.tabSize": 4,
+			"editor.defaultFormatter": null,
+			"python.formatting.blackPath": "/usr/local/bin/black",
+			"python.formatting.provider": "black",
+			"python.linting.enabled": true,
+			"python.linting.pylintEnabled": true,
+			"python.linting.pylintPath": "/usr/local/bin/pylint",
+			"terminal.integrated.defaultProfile.linux": "bash",
+			"vim.vimrc.enable": true,
+			"files.autoSave": "afterDelay",
+			"vim.handleKeys": {
+				"<C-x>": false,
+				"<C-c>": false,
+				"<C-e>": false,
+				"<C-a>": false
+			}
 		}
 	},
 	// "workspaceMount": "source=C:/Users/jepie/.ssh,target=/home/ray/.ssh,type=bind",
@@ -88,9 +91,13 @@
 	// // Uncomment the next line to run commands after the container is created - for example installing curl.
 	// // "postCreateCommand": "apt-get update && apt-get install -y curl",
 	// "postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}"
+	"postStartCommand": "/entrypoint.sh",
 	// // Uncomment when using a ptrace-based debugger like C++, Go, and Rust
 	// // "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
-	"runArgs": ["--gpus", "all"],
+	"runArgs": [
+		"--gpus",
+		"all"
+	],
 	// // Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
 	// // "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
 	// // Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.

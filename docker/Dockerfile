@@ -57,109 +57,109 @@ WORKDIR ${DEV_WORKSPACE}
 # See http://bugs.python.org/issue19846
 ENV LANG C.UTF-8
 
-RUN sudo apt-get update -y && sudo apt-get upgrade -y \
-    && sudo apt-get install -y \
-        cmake \
-        curl \
-        ffmpeg \
-        g++ \ 
-        gcc \
-        git \
-        libgl1-mesa-dev \
-        libgtk2.0-dev \
-        libjemalloc-dev \
-        python-opengl \
-        qt5-default \
-        unrar \
-        unzip \
-        vim \
-        wget \
-        zlib1g-dev \
-        $(if [ "$AUTOSCALER" = "autoscaler" ]; then echo \
-        tmux \
-        screen \
-        rsync \
-        openssh-client \
-        gnupg; fi) \
-    && wget \
-        --quiet "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh" \
-        -O /tmp/miniconda.sh \
-    && /bin/bash /tmp/miniconda.sh -b -u -p $HOME/anaconda3 \
-    && $HOME/anaconda3/bin/conda init \ 
-    && echo 'export PATH=$HOME/anaconda3/bin:$PATH' >> /home/${USERNAME}/.bashrc \
-    && rm /tmp/miniconda.sh \
-    && $HOME/anaconda3/bin/conda install -y \
-        libgcc python=$PYTHON_VERSION \
-    && $HOME/anaconda3/bin/conda clean -y --all \
-    && $HOME/anaconda3/bin/pip install --no-cache-dir \
-        flatbuffers \
-        cython==0.29.26 \
-        # Necessary for Dataset to work properly.
-        numpy\>=1.20 \
-        psutil \
-    # To avoid the following error on Jenkins:
-    # AttributeError: 'numpy.ufunc' object has no attribute '__module__'
-    && $HOME/anaconda3/bin/pip uninstall -y dask \ 
-    # We install cmake temporarily to get psutil
-    && sudo apt-get autoremove -y cmake zlib1g-dev \
-        # We keep g++ on GPU images, because uninstalling removes CUDA Devel tooling
-        $(if [ "$BASE_IMAGE" = "ubuntu:focal" ]; then echo \
-        g++; fi) \
-    # Either install kubectl or remove wget 
-    && (if [ "$AUTOSCALER" = "autoscaler" ]; \
-        then wget -O - -q https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - \
-        && sudo touch /etc/apt/sources.list.d/kubernetes.list \
-        && echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list \
-        && sudo apt-get update \
-        && sudo apt-get install kubectl; \
-    else sudo apt-get autoremove -y wget; \
-    fi;) \
-    && sudo rm -rf /var/lib/apt/lists/* \
-    && sudo apt-get clean
+# RUN sudo apt-get update -y && sudo apt-get upgrade -y \
+#     && sudo apt-get install -y \
+#         cmake \
+#         curl \
+#         ffmpeg \
+#         g++ \ 
+#         gcc \
+#         git \
+#         libgl1-mesa-dev \
+#         libgtk2.0-dev \
+#         libjemalloc-dev \
+#         python-opengl \
+#         qt5-default \
+#         unrar \
+#         unzip \
+#         vim \
+#         wget \
+#         zlib1g-dev \
+#         $(if [ "$AUTOSCALER" = "autoscaler" ]; then echo \
+#         tmux \
+#         screen \
+#         rsync \
+#         openssh-client \
+#         gnupg; fi) \
+#     && wget \
+#         --quiet "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh" \
+#         -O /tmp/miniconda.sh \
+#     && /bin/bash /tmp/miniconda.sh -b -u -p $HOME/anaconda3 \
+#     && $HOME/anaconda3/bin/conda init \ 
+#     && echo 'export PATH=$HOME/anaconda3/bin:$PATH' >> /home/${USERNAME}/.bashrc \
+#     && rm /tmp/miniconda.sh \
+#     && $HOME/anaconda3/bin/conda install -y \
+#         libgcc python=$PYTHON_VERSION \
+#     && $HOME/anaconda3/bin/conda clean -y --all \
+#     && $HOME/anaconda3/bin/pip install --no-cache-dir \
+#         flatbuffers \
+#         cython==0.29.26 \
+#         # Necessary for Dataset to work properly.
+#         numpy\>=1.20 \
+#         psutil \
+#     # To avoid the following error on Jenkins:
+#     # AttributeError: 'numpy.ufunc' object has no attribute '__module__'
+#     && $HOME/anaconda3/bin/pip uninstall -y dask \ 
+#     # We install cmake temporarily to get psutil
+#     && sudo apt-get autoremove -y cmake zlib1g-dev \
+#         # We keep g++ on GPU images, because uninstalling removes CUDA Devel tooling
+#         $(if [ "$BASE_IMAGE" = "ubuntu:focal" ]; then echo \
+#         g++; fi) \
+#     # Either install kubectl or remove wget 
+#     && (if [ "$AUTOSCALER" = "autoscaler" ]; \
+#         then wget -O - -q https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - \
+#         && sudo touch /etc/apt/sources.list.d/kubernetes.list \
+#         && echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list \
+#         && sudo apt-get update \
+#         && sudo apt-get install kubectl; \
+#     else sudo apt-get autoremove -y wget; \
+#     fi;) \
+#     && sudo rm -rf /var/lib/apt/lists/* \
+#     && sudo apt-get clean
 
 
-#  pip install numpy==1.23.5
-#  pip install setuptools==65.5.0 pip==21
-#  pip install wheel==0.38.0
-#  pip install ray[rllib,tune]==1.13.0
-# pip install opencv-python
-# pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 
+# #  pip install numpy==1.23.5
+# #  pip install setuptools==65.5.0 pip==21
+# #  pip install wheel==0.38.0
+# #  pip install ray[rllib,tune]==1.13.0
+# # pip install opencv-python
+# # pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 
 
-# RUN $HOME/anaconda3/bin/pip --no-cache-dir install --upgrade pip \
-# Install dependencies for the environment
-RUN $HOME/anaconda3/bin/pip --no-cache-dir install setuptools==65.5.0 pip==21 \
-    # && ${HOME}/anaconda3/bin/pip --no-cache-dir install --upgrade \
-    && ${HOME}/anaconda3/bin/pip --no-cache-dir install --upgrade \
-    # setuptools==65.5.0 \
-    wheel==0.38.0 \
-    'ray[rllib,tune]==1.13.0' \
-    numpy==1.23.5 \
-    gputil \
-    Pillow \
-    h5py \
-    matplotlib \
-    cycler \
-    opencv-python \
-    # tensorflow==2.6.2 \
-    tensorflow_probability \
-    keras==2.6 \
-    jupyter \
-    pandas \
-    pybullet \
-    stable_baselines3 \
-    pyqt5 \
-    qpsolvers[quadprog] \
-    pyglet==1.5.27 \
-    pybullet==3.2.0 \
-    scikit-image \
-    tensorboardX \
-    torch \
-    torch-tb-profiler \
-    torchvision \
-    torchaudio \
-    wandb==0.12.5 \
-    && if [ $(python -c 'import sys; print(sys.version_info.minor)') != "6" ]; then \
-        $HOME/anaconda3/bin/pip uninstall dataclasses typing -y; fi 
+# # RUN $HOME/anaconda3/bin/pip --no-cache-dir install --upgrade pip \
+# # Install dependencies for the environment
+# RUN $HOME/anaconda3/bin/pip --no-cache-dir install setuptools==65.5.0 pip==21 \
+#     # && ${HOME}/anaconda3/bin/pip --no-cache-dir install --upgrade \
+#     && ${HOME}/anaconda3/bin/pip --no-cache-dir install --upgrade \
+#     # setuptools==65.5.0 \
+#     wheel==0.38.0 \
+#     'ray[rllib,tune]==1.13.0' \
+#     numpy==1.23.5 \
+#     gputil \
+#     Pillow \
+#     h5py \
+#     matplotlib \
+#     cycler \
+#     opencv-python \
+#     # tensorflow==2.6.2 \
+#     tensorflow_probability \
+#     keras==2.6 \
+#     jupyter \
+#     pandas \
+#     pybullet \
+#     stable_baselines3 \
+#     pyqt5 \
+#     qpsolvers[quadprog] \
+#     pyglet==1.5.27 \
+#     pybullet==3.2.0 \
+#     scikit-image \
+#     tensorboardX \
+#     torch \
+#     torch-tb-profiler \
+#     torchvision \
+#     torchaudio \
+#     wandb==0.12.5 \
+#     && if [ $(python -c 'import sys; print(sys.version_info.minor)') != "6" ]; then \
+#         $HOME/anaconda3/bin/pip uninstall dataclasses typing -y; fi 
 
 # set up lightweight display, -E,-preserve-env ensures we get environment variables when using sudo
 RUN sudo apt-get update -y \
