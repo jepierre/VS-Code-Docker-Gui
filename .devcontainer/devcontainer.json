@@ -47,38 +47,38 @@
 				"vscodevim.vim",
 				"njpwerner.autodocstring",
 				"ms-azuretools.vscode-docker"
-			]
-		},
-		"settings": {
-			"vim.insertModeKeyBindings": [
-				{
-					"before": [
-						"j",
-						"k"
-					],
-					"after": [
-						"<Esc>"
-					]
-				}
 			],
-			"terminal.integrated.scrollback": 1000000,
-			"editor.formatOnPaste": true,
-			"editor.formatOnSave": true,
-			"editor.tabSize": 4,
-			"editor.defaultFormatter": null,
-			"python.formatting.blackPath": "/usr/local/bin/black",
-			"python.formatting.provider": "black",
-			"python.linting.enabled": true,
-			"python.linting.pylintEnabled": true,
-			"python.linting.pylintPath": "/usr/local/bin/pylint",
-			"terminal.integrated.defaultProfile.linux": "bash",
-			"vim.vimrc.enable": true,
-			"files.autoSave": "afterDelay",
-			"vim.handleKeys": {
-				"<C-x>": false,
-				"<C-c>": false,
-				"<C-e>": false,
-				"<C-a>": false
+			"settings": {
+				"vim.insertModeKeyBindings": [
+					{
+						"before": [
+							"j",
+							"k"
+						],
+						"after": [
+							"<Esc>"
+						]
+					}
+				],
+				"terminal.integrated.scrollback": 1000000,
+				"editor.formatOnPaste": true,
+				"editor.formatOnSave": true,
+				"editor.tabSize": 4,
+				"editor.defaultFormatter": null,
+				"python.formatting.blackPath": "/usr/local/bin/black",
+				"python.formatting.provider": "black",
+				"python.linting.enabled": true,
+				"python.linting.pylintEnabled": true,
+				"python.linting.pylintPath": "/usr/local/bin/pylint",
+				"terminal.integrated.defaultProfile.linux": "bash",
+				"vim.vimrc.enable": true,
+				"files.autoSave": "afterDelay",
+				"vim.handleKeys": {
+					"<C-x>": false,
+					"<C-c>": false,
+					"<C-e>": false,
+					"<C-a>": false
+				}
 			}
 		}
 	},
@@ -91,7 +91,7 @@
 	// // Uncomment the next line to run commands after the container is created - for example installing curl.
 	// // "postCreateCommand": "apt-get update && apt-get install -y curl",
 	// "postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}"
-	"postStartCommand": "/entrypoint.sh",
+	"postStartCommand": "bash /entrypoint.sh",
 	// // Uncomment when using a ptrace-based debugger like C++, Go, and Rust
 	// // "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
 	"runArgs": [

@@ -168,8 +168,8 @@ RUN sudo apt-get update -y \
     xfce4 \
     fonts-wqy-microhei fonts-wqy-zenhei \
     && sudo apt-get autoremove \
-    && sudo rm -rf /var/lib/apt/lists/* \
     && sudo apt-get clean \
+    && sudo rm -rf /var/lib/apt/lists/* \
     # create X11 socket directory
     && install -d -m 1777 /tmp/.X11-unix \
     && mkdir -p ~/.vnc \
